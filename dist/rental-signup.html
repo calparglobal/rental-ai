@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Rental AI - Sign Up</title>
+
+    <!-- Perfect Scrollbar -->
+    <link type="text/css" href="assets/vendor/perfect-scrollbar.css" rel="stylesheet">
+
+    <!-- App CSS -->
+    <link type="text/css" href="assets/css/app.css" rel="stylesheet">
+    <link type="text/css" href="assets/css/app.rtl.css" rel="stylesheet">
+
+    <!-- Material Design Icons -->
+    <link type="text/css" href="assets/css/vendor-material-icons.css" rel="stylesheet">
+    <link type="text/css" href="assets/css/vendor-material-icons.rtl.css" rel="stylesheet">
+
+    <!-- Font Awesome FREE Icons -->
+    <link type="text/css" href="assets/css/vendor-fontawesome-free.css" rel="stylesheet">
+    <link type="text/css" href="assets/css/vendor-fontawesome-free.rtl.css" rel="stylesheet">
+
+    <style>
+        .rental-ai-logo {
+            background: linear-gradient(45deg, #007bff, #28a745);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body class="layout-login-centered-boxed">
+
+    <div class="layout-login-centered-boxed__form card">
+        <div class="d-flex flex-column justify-content-center align-items-center mt-2 mb-4 navbar-light">
+            <a href="rental-login.html" class="navbar-brand flex-column mb-3 align-items-center mr-0" style="min-width: 0">
+                <span class="text-primary mr-2">
+                    <i class="fas fa-home" style="font-size: 24px;"></i>
+                </span>
+                <span class="rental-ai-logo">Rental AI</span>
+            </a>
+            <h4 class="m-0">Join Rental AI</h4>
+            <p class="m-0 text-muted">Create your account to get started</p>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div id="signupMessage" class="alert" style="display: none;" role="alert">
+            <div id="messageText"></div>
+        </div>
+
+        <!-- Signup Form -->
+        <form id="signupForm" novalidate>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="text-label" for="firstName">First Name:</label>
+                        <div class="input-group input-group-merge">
+                            <input id="firstName" 
+                                   type="text" 
+                                   required 
+                                   class="form-control form-control-prepended"
+                                   placeholder="John">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <span class="far fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="text-label" for="lastName">Last Name:</label>
+                        <div class="input-group input-group-merge">
+                            <input id="lastName" 
+                                   type="text" 
+                                   required 
+                                   class="form-control form-control-prepended"
+                                   placeholder="Doe">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <span class="far fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="text-label" for="email">Email Address:</label>
+                <div class="input-group input-group-merge">
+                    <input id="email" 
+                           type="email" 
+                           required 
+                           class="form-control form-control-prepended"
+                           placeholder="john@example.com">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <span class="far fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="text-label" for="phone">Phone Number:</label>
+                <div class="input-group input-group-merge">
+                    <input id="phone" 
+                           type="tel" 
+                           class="form-control form-control-prepended"
+                           placeholder="(555) 123-4567">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <span class="fas fa-phone"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="text-label" for="role">Account Type:</label>
+                <div class="input-group input-group-merge">
+                    <select id="role" class="form-control form-control-prepended" required>
+                        <option value="">Select account type</option>
+                        <option value="owner">Property Owner</option>
+                        <option value="tenant">Tenant</option>
+                    </select>
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <span class="fas fa-user-tag"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="text-label" for="password">Password:</label>
+                <div class="input-group input-group-merge">
+                    <input id="password" 
+                           type="password" 
+                           required 
+                           class="form-control form-control-prepended"
+                           placeholder="Enter a secure password">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <span class="fa fa-key"></span>
+                        </div>
+                    </div>
+                </div>
+                <small class="text-muted">Password must be at least 6 characters long</small>
+            </div>
+
+            <div class="form-group">
+                <label class="text-label" for="confirmPassword">Confirm Password:</label>
+                <div class="input-group input-group-merge">
+                    <input id="confirmPassword" 
+                           type="password" 
+                           required 
+                           class="form-control form-control-prepended"
+                           placeholder="Confirm your password">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <span class="fa fa-key"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-block btn-primary" type="submit" id="signupBtn">
+                    <span id="signupBtnText">Create Account</span>
+                    <span id="signupSpinner" class="spinner-border spinner-border-sm ml-2" style="display: none;"></span>
+                </button>
+            </div>
+
+            <div class="form-group text-center">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" required id="terms">
+                    <label class="custom-control-label" for="terms">
+                        I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group text-center">
+                Already have an account? <a class="text-body text-underline" href="rental-login.html">Sign in!</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/vendor/jquery.min.js"></script>
+    <script src="assets/vendor/popper.min.js"></script>
+    <script src="assets/vendor/bootstrap.min.js"></script>
+    <script src="assets/vendor/perfect-scrollbar.min.js"></script>
+    <script src="assets/vendor/dom-factory.js"></script>
+    <script src="assets/vendor/material-design-kit.js"></script>
+    <script src="assets/js/app.js"></script>
+
+    <script>
+        // API Configuration
+        const API_BASE_URL = 'http://localhost:3001/api';
+
+        // DOM Elements
+        const signupForm = document.getElementById('signupForm');
+        const signupBtn = document.getElementById('signupBtn');
+        const signupBtnText = document.getElementById('signupBtnText');
+        const signupSpinner = document.getElementById('signupSpinner');
+        const signupMessage = document.getElementById('signupMessage');
+        const messageText = document.getElementById('messageText');
+
+        // Handle signup form submission
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await handleSignup();
+        });
+
+        // Main signup function
+        async function handleSignup() {
+            // Get form data
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const role = document.getElementById('role').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const terms = document.getElementById('terms').checked;
+
+            // Validation
+            if (!firstName || !lastName || !email || !role || !password || !confirmPassword) {
+                showMessage('Please fill in all required fields.', 'danger');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters long.', 'danger');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match.', 'danger');
+                return;
+            }
+
+            if (!terms) {
+                showMessage('Please accept the Terms of Service and Privacy Policy.', 'danger');
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('Please enter a valid email address.', 'danger');
+                return;
+            }
+
+            setLoading(true);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        phone: phone || null,
+                        role: role,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store authentication data
+                    localStorage.setItem('rental_ai_token', data.token);
+                    localStorage.setItem('rental_ai_user', JSON.stringify(data.user));
+
+                    showMessage(`Welcome to Rental AI, ${data.user.first_name}! Redirecting to dashboard...`, 'success');
+
+                    // Redirect to dashboard after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+
+                } else {
+                    showMessage(data.error || 'Registration failed. Please try again.', 'danger');
+                }
+
+            } catch (error) {
+                console.error('Signup error:', error);
+                showMessage('Connection error. Please check if the backend server is running.', 'danger');
+            }
+
+            setLoading(false);
+        }
+
+        // Show message to user
+        function showMessage(message, type) {
+            messageText.textContent = message;
+            signupMessage.className = `alert alert-${type}`;
+            signupMessage.style.display = 'block';
+
+            // Auto-hide error messages after 7 seconds
+            if (type === 'danger') {
+                setTimeout(() => {
+                    signupMessage.style.display = 'none';
+                }, 7000);
+            }
+        }
+
+        // Set loading state
+        function setLoading(loading) {
+            if (loading) {
+                signupBtn.disabled = true;
+                signupBtnText.textContent = 'Creating Account...';
+                signupSpinner.style.display = 'inline-block';
+            } else {
+                signupBtn.disabled = false;
+                signupBtnText.textContent = 'Create Account';
+                signupSpinner.style.display = 'none';
+            }
+        }
+
+        // Real-time password confirmation validation
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            
+            if (confirmPassword && password !== confirmPassword) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        // Check if user is already logged in
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('rental_ai_token');
+            const user = localStorage.getItem('rental_ai_user');
+
+            if (token && user) {
+                showMessage('Already logged in! Redirecting to dashboard...', 'info');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            }
+        });
+    </script>
+
+</body>
+</html>
