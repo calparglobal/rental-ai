@@ -18,7 +18,7 @@ console.log('Multi-tenant database config check:', {
 // ============================================================================
 
 export interface SuperAdmin {
-  id: string
+  id: number
   email: string
   password_hash: string
   first_name: string
@@ -31,7 +31,7 @@ export interface SuperAdmin {
 }
 
 export interface Tenant {
-  id: string
+  id: number
   name: string
   business_type: 'vehicle_rental' | 'equipment_rental' | 'property_rental' | 'event_rental' | 'specialty_rental'
   subdomain: string
@@ -49,8 +49,8 @@ export interface Tenant {
 }
 
 export interface TenantUser {
-  id: string
-  tenant_id: string
+  id: number
+  tenant_id: number
   email: string
   password_hash: string
   first_name: string
@@ -141,7 +141,7 @@ export async function initMultiTenantDatabase() {
     // Create super_admins table
     await sql`
       CREATE TABLE IF NOT EXISTS super_admins (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        id SERIAL PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
         first_name VARCHAR(100) NOT NULL,
@@ -157,7 +157,7 @@ export async function initMultiTenantDatabase() {
     // Create tenants table
     await sql`
       CREATE TABLE IF NOT EXISTS tenants (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         business_type VARCHAR(100) NOT NULL CHECK (business_type IN ('vehicle_rental', 'equipment_rental', 'property_rental', 'event_rental', 'specialty_rental')),
         subdomain VARCHAR(100) UNIQUE,
@@ -178,8 +178,8 @@ export async function initMultiTenantDatabase() {
     // Create updated users table with tenant isolation
     await sql`
       CREATE TABLE IF NOT EXISTS users (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        tenant_id UUID REFERENCES tenants(id) ON DELETE CASCADE,
+        id SERIAL PRIMARY KEY,
+        tenant_id INTEGER REFERENCES tenants(id) ON DELETE CASCADE,
         email VARCHAR(255) NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
         first_name VARCHAR(100) NOT NULL,

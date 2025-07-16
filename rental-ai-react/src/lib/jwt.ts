@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 
 // JWT Payload interfaces
 export interface SuperAdminJWTPayload {
-  user_id: string
+  user_id: number
   email: string
   user_type: 'super_admin'
   permissions: string[]
@@ -11,8 +11,8 @@ export interface SuperAdminJWTPayload {
 }
 
 export interface TenantUserJWTPayload {
-  user_id: string
-  tenant_id: string
+  user_id: number
+  tenant_id: number
   email: string
   user_type: 'tenant_user'
   role: string
@@ -29,7 +29,7 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h'
 
 // Token Generation
 export function generateSuperAdminToken(payload: {
-  user_id: string
+  user_id: number
   email: string
   permissions: string[]
 }): string {
@@ -48,8 +48,8 @@ export function generateSuperAdminToken(payload: {
 }
 
 export function generateTenantUserToken(payload: {
-  user_id: string
-  tenant_id: string
+  user_id: number
+  tenant_id: number
   email: string
   role: string
   permissions: string[]
@@ -104,7 +104,7 @@ export function isTenantUser(payload: JWTPayload): payload is TenantUserJWTPaylo
 }
 
 // Tenant Context Validation
-export function validateTenantAccess(payload: JWTPayload, requestedTenantId: string): boolean {
+export function validateTenantAccess(payload: JWTPayload, requestedTenantId: number): boolean {
   // Super admins can access any tenant
   if (isSuperAdmin(payload)) {
     return true

@@ -12,9 +12,15 @@ export async function GET() {
       })
     }
 
-    // Test database connection and initialize multi-tenant schema in production
+    // Test database connection first
+    console.log('Testing database connection...')
     await testConnection()
+    console.log('Database connection successful')
+    
+    // Then initialize multi-tenant schema
+    console.log('Initializing multi-tenant database...')
     await initMultiTenantDatabase()
+    console.log('Multi-tenant database initialized')
     
     return NextResponse.json({ 
       status: 'healthy', 
@@ -30,6 +36,7 @@ export async function GET() {
         status: 'unhealthy', 
         environment: process.env.NODE_ENV,
         error: error instanceof Error ? error.message : 'Unknown error',
+        details: error instanceof Error ? error.stack : 'No stack trace',
         timestamp: new Date().toISOString()
       },
       { status: 500 }
