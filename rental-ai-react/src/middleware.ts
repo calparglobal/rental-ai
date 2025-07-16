@@ -93,17 +93,26 @@ export async function middleware(request: NextRequest) {
   }
 
   // Extract token from request
-  const token = extractTokenFromRequest(request) || request.cookies.get('auth-token')?.value
+  let token = extractTokenFromRequest(request)
+  
+  // Check for appropriate token based on route type
+  if (!token) {
+    if (isSuperAdminRoute(pathname)) {
+      token = request.cookies.get('super-admin-token')?.value
+    } else {
+      token = request.cookies.get('auth-token')?.value
+    }
+  }
   
   if (!token) {
-    // No token - redirect to login
+    // No token - redirect to appropriate login
     return redirectToLogin(request)
   }
 
   // Verify token
   const payload = verifyToken(token)
   if (!payload) {
-    // Invalid token - redirect to login
+    // Invalid token - redirect to appropriate login
     return redirectToLogin(request)
   }
 
@@ -118,7 +127,7 @@ export async function middleware(request: NextRequest) {
     
     // Add super admin context to headers
     const response = NextResponse.next()
-    response.headers.set('x-user-id', payload.user_id)
+    response.headers.set('x-user-id', payload.user_id.toString())
     response.headers.set('x-user-type', 'super_admin')
     response.headers.set('x-permissions', JSON.stringify(payload.permissions))
     
@@ -129,7 +138,7 @@ export async function middleware(request: NextRequest) {
   if (isTenantRoute(pathname)) {
     // Extract tenant context
     const tenantSubdomain = extractTenantFromSubdomain(host)
-    let tenantId: string | null = null
+    let tenantId: number | null = null
 
     if (isTenantUser(payload)) {
       tenantId = payload.tenant_id
@@ -137,7 +146,8 @@ export async function middleware(request: NextRequest) {
       // Super admin can access any tenant
       // For now, we'll need to determine tenant from subdomain or request
       // This could be enhanced to allow super admin to impersonate tenants
-      tenantId = tenantSubdomain // This would need to be resolved to actual tenant ID
+      // tenantId = tenantSubdomain // This would need to be resolved to actual tenant ID
+      tenantId = 1 // Default to first tenant for super admin access
     }
 
     if (!tenantId) {
@@ -157,9 +167,9 @@ export async function middleware(request: NextRequest) {
 
     // Add tenant context to headers
     const response = NextResponse.next()
-    response.headers.set('x-user-id', payload.user_id)
+    response.headers.set('x-user-id', payload.user_id.toString())
     response.headers.set('x-user-type', payload.user_type)
-    response.headers.set('x-tenant-id', tenantId)
+    response.headers.set('x-tenant-id', tenantId.toString())
     response.headers.set('x-permissions', JSON.stringify(payload.permissions))
     
     if (isTenantUser(payload)) {
@@ -173,10 +183,20 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 
-// Helper function to redirect to login
+// Helper function to redirect to appropriate login
 function redirectToLogin(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  
+  // If this is a Super Admin route, redirect to Super Admin login
+  if (isSuperAdminRoute(pathname)) {
+    const loginUrl = new URL('/super-admin/login', request.url)
+    loginUrl.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(loginUrl)
+  }
+  
+  // Otherwise, redirect to regular tenant login
   const loginUrl = new URL('/login', request.url)
-  loginUrl.searchParams.set('redirect', request.nextUrl.pathname)
+  loginUrl.searchParams.set('redirect', pathname)
   return NextResponse.redirect(loginUrl)
 }
 

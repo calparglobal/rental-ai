@@ -31,26 +31,6 @@ export default function LoginPage() {
     setIsLoading(false)
   }
 
-  // Quick login for demo
-  const quickLogin = async (role: string) => {
-    const credentials = {
-      owner: { email: 'owner@example.com', password: 'password' },
-      tenant: { email: 'tenant@example.com', password: 'password' },
-      admin: { email: 'admin@example.com', password: 'password' },
-    }
-
-    const cred = credentials[role as keyof typeof credentials]
-    if (cred) {
-      setEmail(cred.email)
-      setPassword(cred.password)
-      setIsLoading(true)
-      const success = await login(cred.email, cred.password)
-      if (success) {
-        router.push('/dashboard')
-      }
-      setIsLoading(false)
-    }
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
@@ -59,48 +39,12 @@ export default function LoginPage() {
           <div className="flex items-center justify-center mb-4">
             <Logo size="lg" />
           </div>
-          <CardTitle className="text-2xl text-center">Welcome back!</CardTitle>
+          <CardTitle className="text-2xl text-center">Organization Login</CardTitle>
           <CardDescription className="text-center">
-            Login to access your Rental AI dashboard
+            Login to access your organization's rental management platform
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Quick Login Demo */}
-          <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
-            <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
-              Quick Login Options:
-            </p>
-            <div className="flex gap-2 flex-wrap">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => quickLogin('owner')}
-                disabled={isLoading}
-                className="text-xs"
-              >
-                Owner
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => quickLogin('tenant')}
-                disabled={isLoading}
-                className="text-xs"
-              >
-                Tenant
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => quickLogin('admin')}
-                disabled={isLoading}
-                className="text-xs"
-              >
-                Admin
-              </Button>
-            </div>
-          </div>
-
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>

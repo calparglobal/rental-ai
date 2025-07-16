@@ -17,8 +17,7 @@ export default function SignupPage() {
     password: '',
     confirmPassword: '',
     first_name: '',
-    last_name: '',
-    role: 'tenant'
+    last_name: ''
   })
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -39,8 +38,7 @@ export default function SignupPage() {
       email: formData.email,
       password: formData.password,
       first_name: formData.first_name,
-      last_name: formData.last_name,
-      role: formData.role
+      last_name: formData.last_name
     })
 
     if (success) {
@@ -64,9 +62,9 @@ export default function SignupPage() {
           <div className="flex items-center justify-center mb-4">
             <Logo size="lg" />
           </div>
-          <CardTitle className="text-2xl text-center">Join Rental AI</CardTitle>
+          <CardTitle className="text-2xl text-center">Join Your Organization</CardTitle>
           <CardDescription className="text-center">
-            Create your account to get started
+            Create your account to access your organization's rental management platform
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -109,21 +107,6 @@ export default function SignupPage() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="role">I am a</Label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleInputChange}
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                required
-              >
-                <option value="tenant">Tenant (Looking for rental)</option>
-                <option value="owner">Property Owner</option>
-                <option value="admin">Administrator</option>
-              </select>
-            </div>
 
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
