@@ -158,12 +158,13 @@ export const config = {
     /*
      * Match all request paths except for the ones starting with:
      * - api (API routes)
+     * - auth (auth API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder files
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
-    '/api/((?!auth/signin|auth/signup|super-admin/auth/signin).*)'
+    '/((?!api|auth|_next/static|_next/image|favicon.ico|public).*)',
+    '/api/((?!auth/signin|auth/signup|super-admin/auth/signin|init-db|health).*)'
   ]
 }
