@@ -28,7 +28,7 @@ export function Logo({ size = 'md', className }: LogoProps) {
         <Building2 
           className={cn(
             sizeClasses[size].icon,
-            'text-blue-600 dark:text-blue-400'
+            'text-black dark:text-white'
           )} 
         />
         <div className="absolute -top-1 -right-1 w-2 h-2 bg-emerald-500 rounded-full"></div>
@@ -38,7 +38,7 @@ export function Logo({ size = 'md', className }: LogoProps) {
         'text-gray-900 dark:text-gray-100 tracking-tight font-semibold'
       )}>
         Rental
-        <span className="text-blue-600 dark:text-blue-400 ml-1">AI</span>
+        <span className="text-black dark:text-white ml-1">AI</span>
       </span>
     </div>
   )
