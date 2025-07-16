@@ -31,7 +31,14 @@ class Database {
             
             for (const statement of statements) {
                 if (statement.trim()) {
-                    await this.run(statement);
+                    try {
+                        await this.run(statement);
+                    } catch (error) {
+                        // Ignore constraint errors for test data that already exists
+                        if (error.code !== 'SQLITE_CONSTRAINT') {
+                            throw error;
+                        }
+                    }
                 }
             }
             

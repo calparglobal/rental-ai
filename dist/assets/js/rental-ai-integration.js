@@ -6,7 +6,7 @@
 (function() {
     'use strict';
 
-    const API_BASE_URL = 'http://localhost:3001/api';
+    const API_BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
 
     // Utility function for API calls
     async function apiCall(endpoint) {
@@ -227,7 +227,20 @@
         const health = await apiCall('/health');
         if (health) {
             console.log('✅ API Health Check:', health);
-            return true;
+            
+            // Check if using real database or demo data
+            if (health.database === 'demo') {
+                console.warn('⚠️ Using demo data - no database connected');
+                showDemoDataWarning();
+                return true; // Still connected, just using demo data
+            } else if (health.database === 'connected') {
+                console.log('✅ Real database connected');
+                return true;
+            } else {
+                console.error('❌ Database connection error');
+                showApiError();
+                return false;
+            }
         } else {
             console.error('❌ API connection failed');
             showApiError();
@@ -249,8 +262,26 @@
             z-index: 9999;
             font-size: 14px;
         `;
-        errorDiv.innerHTML = '⚠️ Backend API not connected. Using demo data.';
+        errorDiv.innerHTML = '⚠️ Backend API not connected. Some features may not work.';
         document.body.appendChild(errorDiv);
+    }
+
+    // Show demo data warning
+    function showDemoDataWarning() {
+        const warningDiv = document.createElement('div');
+        warningDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ffc107;
+            color: #212529;
+            padding: 12px 20px;
+            border-radius: 6px;
+            z-index: 9999;
+            font-size: 14px;
+        `;
+        warningDiv.innerHTML = '⚠️ Backend API not connected. Using demo data.';
+        document.body.appendChild(warningDiv);
     }
 
     // Main initialization function

@@ -231,16 +231,16 @@
         if (!token) return false;
 
         try {
-            const response = await fetch('http://localhost:3001/api/auth/profile', {
+            const API_BASE_URL = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+            const response = await fetch(`${API_BASE_URL}/auth/profile`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
 
             if (!response.ok) {
-                console.log('❌ Token validation failed');
-                clearAuthData();
-                redirectToLogin();
+                console.log('❌ Token validation failed with status:', response.status);
+                // Don't automatically redirect - let the calling code decide
                 return false;
             }
 
@@ -270,8 +270,13 @@
         if (isAuthenticated) {
             addAuthIndicator();
             
-            // Optionally validate with server
-            setTimeout(validateTokenWithServer, 2000);
+            // Optionally validate with server (non-blocking)
+            setTimeout(async () => {
+                const isValid = await validateTokenWithServer();
+                if (!isValid) {
+                    console.log('⚠️ Server validation failed, but keeping local session');
+                }
+            }, 2000);
         } else {
             // Not authenticated - hide page content and show loading
             console.log('❌ Not authenticated, blocking page access');

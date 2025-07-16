@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { authenticateSuperAdmin, initMultiTenantDatabase } from '@/lib/database-multitenant'
 import { generateSuperAdminToken, getRolePermissions } from '@/lib/jwt'
 
+export const runtime = 'nodejs'
+
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
 
 export async function POST(request: NextRequest) {

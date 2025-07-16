@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { verifyToken, isSuperAdmin, isTenantUser, validateTenantAccess } from './lib/jwt'
 
+export const runtime = 'nodejs'
+
 // Protected routes configuration
 const PROTECTED_ROUTES = {
   // Super Admin routes
