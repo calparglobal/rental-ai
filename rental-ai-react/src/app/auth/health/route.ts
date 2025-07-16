@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { testConnection } from '@/lib/database'
+import { testConnection, initMultiTenantDatabase } from '@/lib/database-multitenant'
 
 export async function GET() {
   try {
@@ -7,17 +7,20 @@ export async function GET() {
       return NextResponse.json({ 
         status: 'healthy', 
         environment: 'development',
-        database: 'local backend' 
+        database: 'local backend',
+        architecture: 'multi-tenant'
       })
     }
 
-    // Test database connection in production
+    // Test database connection and initialize multi-tenant schema in production
     await testConnection()
+    await initMultiTenantDatabase()
     
     return NextResponse.json({ 
       status: 'healthy', 
       environment: 'production',
       database: 'connected',
+      architecture: 'multi-tenant',
       timestamp: new Date().toISOString()
     })
   } catch (error) {
@@ -26,7 +29,7 @@ export async function GET() {
       { 
         status: 'unhealthy', 
         environment: process.env.NODE_ENV,
-        error: error.message,
+        error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       },
       { status: 500 }
