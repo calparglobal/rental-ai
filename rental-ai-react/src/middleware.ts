@@ -26,11 +26,14 @@ const PROTECTED_ROUTES = {
   PUBLIC: [
     '/login',
     '/signup',
+    '/super-admin/login',
     '/forgot-password',
     '/reset-password',
     '/api/auth/signin',
     '/api/auth/signup',
+    '/api/super-admin/auth/signin',
     '/api/health',
+    '/auth/health',
     '/'
   ]
 }
@@ -197,6 +200,6 @@ export const config = {
      * - public folder files
      */
     '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
-    '/api/((?!auth/signin|auth/signup|health).*)'
+    '/api/((?!auth/signin|auth/signup|super-admin/auth/signin).*)'
   ]
 }

@@ -24,7 +24,7 @@ export interface TenantUserJWTPayload {
 export type JWTPayload = SuperAdminJWTPayload | TenantUserJWTPayload
 
 // JWT Configuration
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-key-change-in-production'
+const JWT_SECRET = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || 'rental-ai-jwt-secret-key-change-in-production'
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h'
 
 // Token Generation
