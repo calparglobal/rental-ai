@@ -17,16 +17,13 @@ export async function GET() {
     await testConnection()
     console.log('Database connection successful')
     
-    // Then initialize multi-tenant schema
-    console.log('Initializing multi-tenant database...')
-    await initMultiTenantDatabase()
-    console.log('Multi-tenant database initialized')
-    
+    // Return success without initializing database for now
     return NextResponse.json({ 
       status: 'healthy', 
       environment: 'production',
       database: 'connected',
       architecture: 'multi-tenant',
+      note: 'Database initialization skipped for testing',
       timestamp: new Date().toISOString()
     })
   } catch (error) {
