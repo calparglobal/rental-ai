@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { authenticateSuperAdmin } from '@/lib/database-multitenant'
+import { authenticateSuperAdmin, initMultiTenantDatabase } from '@/lib/database-multitenant'
 import { generateSuperAdminToken, getRolePermissions } from '@/lib/jwt'
 
 export async function POST(request: NextRequest) {
@@ -13,35 +13,79 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Authenticate super admin
-    const superAdmin = await authenticateSuperAdmin(email, password)
+    // Check if we're in development mode without database connection
+    const hasDBConfig = process.env.POSTGRES_URL || process.env.DATABASE_URL
+    
+    if (!hasDBConfig) {
+      // In development without database, use hardcoded super admin for testing
+      if (email === 'superadmin@rentalai.com' && password === 'admin123') {
+        const token = generateSuperAdminToken({
+          user_id: 1,
+          email: email,
+          permissions: getRolePermissions('super_admin')
+        })
 
-    if (!superAdmin) {
-      return NextResponse.json(
-        { message: 'Invalid credentials' },
-        { status: 401 }
-      )
+        return NextResponse.json({
+          success: true,
+          token,
+          user: {
+            id: 1,
+            email: email,
+            first_name: 'Super',
+            last_name: 'Admin',
+            permissions: getRolePermissions('super_admin'),
+            user_type: 'super_admin'
+          }
+        })
+      } else {
+        return NextResponse.json(
+          { message: 'Invalid credentials' },
+          { status: 401 }
+        )
+      }
     }
 
-    // Generate JWT token
-    const token = generateSuperAdminToken({
-      user_id: superAdmin.id,
-      email: superAdmin.email,
-      permissions: superAdmin.permissions || getRolePermissions('super_admin')
-    })
+    // With database connection, use normal authentication
+    try {
+      // Initialize database if needed
+      await initMultiTenantDatabase()
+      
+      // Authenticate super admin
+      const superAdmin = await authenticateSuperAdmin(email, password)
 
-    return NextResponse.json({
-      success: true,
-      token,
-      user: {
-        id: superAdmin.id,
-        email: superAdmin.email,
-        first_name: superAdmin.first_name,
-        last_name: superAdmin.last_name,
-        permissions: superAdmin.permissions || getRolePermissions('super_admin'),
-        user_type: 'super_admin'
+      if (!superAdmin) {
+        return NextResponse.json(
+          { message: 'Invalid credentials' },
+          { status: 401 }
+        )
       }
-    })
+
+      // Generate JWT token
+      const token = generateSuperAdminToken({
+        user_id: superAdmin.id,
+        email: superAdmin.email,
+        permissions: superAdmin.permissions || getRolePermissions('super_admin')
+      })
+
+      return NextResponse.json({
+        success: true,
+        token,
+        user: {
+          id: superAdmin.id,
+          email: superAdmin.email,
+          first_name: superAdmin.first_name,
+          last_name: superAdmin.last_name,
+          permissions: superAdmin.permissions || getRolePermissions('super_admin'),
+          user_type: 'super_admin'
+        }
+      })
+    } catch (dbError) {
+      console.error('Database error:', dbError)
+      return NextResponse.json(
+        { message: 'Database connection failed' },
+        { status: 500 }
+      )
+    }
 
   } catch (error) {
     console.error('Super admin authentication error:', error)

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { authenticateUser, initDatabase } from '@/lib/database'
+import { authenticateTenantUser, initMultiTenantDatabase } from '@/lib/database-multitenant'
+import { generateTenantUserToken } from '@/lib/jwt'
 
 const BACKEND_URL = 'http://localhost:3001/api'
 
@@ -27,13 +28,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(data)
     }
     
-    // In production, use Vercel Postgres database
+    // In production, use multi-tenant database
+    const hasDBConfig = process.env.POSTGRES_URL || process.env.DATABASE_URL
+    
+    if (!hasDBConfig) {
+      return NextResponse.json(
+        { error: 'Database connection not configured' },
+        { status: 500 }
+      )
+    }
+    
     try {
       // Initialize database if needed
-      await initDatabase()
+      await initMultiTenantDatabase()
       
-      // Authenticate user
-      const user = await authenticateUser(email, password)
+      // Authenticate tenant user
+      const user = await authenticateTenantUser(email, password)
       
       if (!user) {
         return NextResponse.json(
@@ -42,8 +52,14 @@ export async function POST(request: NextRequest) {
         )
       }
       
-      // Generate a JWT token (simplified for demo)
-      const token = `jwt-token-${user.id}-${Date.now()}`
+      // Generate JWT token
+      const token = generateTenantUserToken({
+        user_id: user.id,
+        tenant_id: user.tenant_id,
+        email: user.email,
+        role: user.role,
+        permissions: user.permissions
+      })
       
       return NextResponse.json({
         message: 'Login successful',
@@ -53,7 +69,8 @@ export async function POST(request: NextRequest) {
           email: user.email,
           first_name: user.first_name,
           last_name: user.last_name,
-          role: user.role
+          role: user.role,
+          tenant_id: user.tenant_id
         }
       })
     } catch (dbError) {

@@ -35,11 +35,13 @@ const PROTECTED_ROUTES = {
     '/api/health',
     '/api/init-db',
     '/auth/health',
+    '/auth/signin',
+    '/auth/signup',
     '/'
   ]
 }
 
-// Tenant subdomain extraction
+// Tenant subdomain extraction (currently unused but kept for future multi-tenant subdomain support)
 function extractTenantFromSubdomain(host: string): string | null {
   // Handle localhost and custom domains
   if (host.includes('localhost') || host.includes('127.0.0.1')) {
@@ -76,7 +78,6 @@ function isTenantRoute(pathname: string): boolean {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const host = request.headers.get('host') || ''
   
   // Skip middleware for static assets and Next.js internals
   if (
@@ -98,9 +99,9 @@ export async function middleware(request: NextRequest) {
   // Check for appropriate token based on route type
   if (!token) {
     if (isSuperAdminRoute(pathname)) {
-      token = request.cookies.get('super-admin-token')?.value
+      token = request.cookies.get('super-admin-token')?.value || null
     } else {
-      token = request.cookies.get('auth-token')?.value
+      token = request.cookies.get('auth-token')?.value || null
     }
   }
   
@@ -137,7 +138,6 @@ export async function middleware(request: NextRequest) {
   // Handle Tenant routes
   if (isTenantRoute(pathname)) {
     // Extract tenant context
-    const tenantSubdomain = extractTenantFromSubdomain(host)
     let tenantId: number | null = null
 
     if (isTenantUser(payload)) {
