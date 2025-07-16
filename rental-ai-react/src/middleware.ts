@@ -33,6 +33,7 @@ const PROTECTED_ROUTES = {
     '/api/auth/signup',
     '/api/super-admin/auth/signin',
     '/api/health',
+    '/api/init-db',
     '/auth/health',
     '/'
   ]
