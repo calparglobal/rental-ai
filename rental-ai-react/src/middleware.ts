@@ -156,15 +156,16 @@ function extractTokenFromRequest(request: NextRequest): string | null {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - auth (auth API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder files
+     * Only match dashboard and protected routes, exclude all auth routes
      */
-    '/((?!api|auth|_next/static|_next/image|favicon.ico|public).*)',
-    '/api/((?!auth/signin|auth/signup|super-admin/auth/signin|init-db|health).*)'
+    '/dashboard/:path*',
+    '/properties/:path*',
+    '/customers/:path*',
+    '/agreements/:path*',
+    '/assets/:path*',
+    '/reports/:path*',
+    '/settings/:path*',
+    '/super-admin/dashboard/:path*',
+    '/super-admin/tenants/:path*'
   ]
 }
