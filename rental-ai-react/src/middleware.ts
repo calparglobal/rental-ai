@@ -156,16 +156,10 @@ function extractTokenFromRequest(request: NextRequest): string | null {
 export const config = {
   matcher: [
     /*
-     * Only match dashboard and protected routes, exclude all auth routes
+     * Temporarily disable middleware to fix auth issues
+     * Only match very specific protected routes
      */
     '/dashboard/:path*',
-    '/properties/:path*',
-    '/customers/:path*',
-    '/agreements/:path*',
-    '/assets/:path*',
-    '/reports/:path*',
-    '/settings/:path*',
-    '/super-admin/dashboard/:path*',
-    '/super-admin/tenants/:path*'
+    '/super-admin/dashboard/:path*'
   ]
 }
